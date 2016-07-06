@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [[ $# < 1 ]] || ! [[ $1 =~ ^[0-9]*$ ]]
+then
+  echo "$0"
+  echo "a simple program that gets the pid of the program listening to the port specified"
+  echo "usage: $0 PORT"
+  exit 1
+fi
+
+output=$(
+	lsof -i :$1 |
+	grep LISTEN |
+	awk '{print $2}'
+)
+if [ -n "$output" ]
+then
+  echo $output
+  exit 0
+else
+  exit 1
+fi
+
